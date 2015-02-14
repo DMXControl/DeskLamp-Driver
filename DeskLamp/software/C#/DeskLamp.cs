@@ -195,6 +195,12 @@ namespace DeskLamp {
             return false;
         }
 
+        public bool HasStrobe {
+            get {
+                return _version >= 2;
+            }
+        }
+
         public bool IsRGB {
             get {
                 if (!Enabled || !IsAvailable) {
