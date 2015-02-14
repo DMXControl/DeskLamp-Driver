@@ -15,8 +15,9 @@ namespace DeskLamp
                 System.Console.WriteLine(" * {0}", id);
             }
 
-            if (lamps.Count > 0) {
-                DeskLamp.DeskLampInstance lamp = new DeskLampInstance(lamps[0]);
+            foreach (string id in lamps) {
+                System.Console.WriteLine();
+                DeskLamp.DeskLampInstance lamp = new DeskLampInstance(id);
                 if (lamp.IsAvailable) {
                     System.Console.WriteLine("Lamp with ID {0} is available", lamp.ID);
                     System.Console.WriteLine("Lamp version: {0}", lamp.Version);
@@ -26,6 +27,7 @@ namespace DeskLamp
 
                         System.Console.Write("Fading brightness...");
                         int dir = 1;
+                        lamp.Brightness = 0;
                         for (int i = 0; i < 6; ++i) {
                             for (int j = 0; j < 255; ++j) {
                                 lamp.Brightness += (byte)dir;

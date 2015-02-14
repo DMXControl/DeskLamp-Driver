@@ -130,6 +130,10 @@ namespace DeskLamp {
         /// </summary>
         public byte Brightness {
             get {
+                if (!Enabled || !IsAvailable) {
+                    return this._brightness;
+                }
+
                 if (_version < 2) {
                     return this._brightness;
                 }
@@ -193,6 +197,10 @@ namespace DeskLamp {
 
         public bool IsRGB {
             get {
+                if (!Enabled || !IsAvailable) {
+                    return false;
+                }
+
                 if (_version < 2) {
                     return false;
                 }
@@ -210,6 +218,10 @@ namespace DeskLamp {
 
         public bool ExternalUSBConnected {
             get {
+                if (!Enabled || !IsAvailable) {
+                    return false;
+                }
+
                 if (_version < 2) {
                     return false;
                 }
@@ -228,6 +240,10 @@ namespace DeskLamp {
         public byte Strobe {
             get { return _strobe; }
             set {
+                if (!Enabled || !IsAvailable) {
+                    return;
+                }
+
                 if (_version < 2) {
                     return;
                 }
@@ -250,6 +266,10 @@ namespace DeskLamp {
 
         public Color Color {
             get {
+                if (!Enabled || !IsAvailable) {
+                    return Color.White;
+                }
+
                 if (_version < 2) {
                     return Color.White;
                 }
@@ -266,6 +286,10 @@ namespace DeskLamp {
                 return Color.FromArgb(sendBuffer[1], sendBuffer[2], sendBuffer[3]);
             }
             set {
+                if (!Enabled || !IsAvailable) {
+                    return;
+                }
+
                 if (_version < 2) {
                     return;
                 }
