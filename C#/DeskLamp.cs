@@ -451,6 +451,7 @@ namespace DeskLamp {
                                     if (thisID.Equals(id)) {
                                         handle = tmp;
                                         tmp = IntPtr.Zero;
+                                        break;
                                     }
                                 }
                             }
