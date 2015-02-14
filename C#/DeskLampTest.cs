@@ -37,7 +37,7 @@ namespace DeskLamp
                         }
                         System.Console.WriteLine(" Done.");
 
-                        if (lamp.Version >= 2) {
+                        if (lamp.HasStrobe) {
                             System.Console.WriteLine("Setting strobe speed");
                             lamp.Brightness = 255;
                             lamp.Strobe = 192;
