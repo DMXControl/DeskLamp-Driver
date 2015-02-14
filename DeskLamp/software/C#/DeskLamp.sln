@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskLamp", "DeskLamp.csproj", "{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Test|Any CPU = Test|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}.Test|Any CPU.Build.0 = Test|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
