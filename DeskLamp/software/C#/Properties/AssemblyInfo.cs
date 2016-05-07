@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("DMXControl Projects e.V.")]
 [assembly: AssemblyProduct("DMXControl")]
-[assembly: AssemblyCopyright("Copyright © DMXControl Projects e.V. 2013")]
+[assembly: AssemblyCopyright("Copyright © DMXControl Projects e.V. 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
