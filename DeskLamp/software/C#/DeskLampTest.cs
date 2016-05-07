@@ -67,6 +67,8 @@ namespace DeskLamp
                     System.Console.WriteLine("Lamp with ID {0} not available!", lamp.ID);
                 }
             }
+			System.Console.WriteLine("Test done! Programm will exit in 5 seconds.");
+			System.Threading.Thread.Sleep(5000);
         }
 
         // Given H,S,L in range of 0-1
