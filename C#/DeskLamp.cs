@@ -443,10 +443,12 @@ namespace DeskLamp {
                                             thisID = buffer.ToString();
                                         } else {
                                             thisID = deviceCnt.ToString();
+                                            deviceCnt++;
                                         }
                                         version = 2;
                                     } else {
                                         thisID = deviceCnt.ToString();
+                                        deviceCnt++;
                                         version = 1;
                                     }
 
