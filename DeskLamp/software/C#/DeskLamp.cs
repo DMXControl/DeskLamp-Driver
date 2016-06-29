@@ -220,6 +220,23 @@ namespace DeskLamp {
                 }
                 return (sendBuffer[1] == 0); // Colormode 0 = RGB
             }
+            set {
+                if (!Enabled || !IsAvailable) {
+                    return;
+                }
+
+                if (_version < 2) {
+                    return;
+                }
+                byte[] sendBuffer = new byte[] { 
+                    5, // Set Colormode
+                    (byte)(value ? 0 : 1)
+                };
+                if (!DeskLampInterface.HidD_SetFeature(this._HIDHandle, sendBuffer, sendBuffer.Length)) {
+                    Close();
+                    return;
+                }
+            }
         }
 
         public bool ExternalUSBConnected {
@@ -552,6 +569,9 @@ namespace DeskLamp {
 
         [DllImport("hid.dll", SetLastError = true)]
         public static extern bool HidD_GetFeature(IntPtr HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength);
+
+        [DllImport("hid.dll", SetLastError = true)]
+        public static extern bool HidD_SetFeature(IntPtr HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength);
 
         [DllImport("setupapi.dll", SetLastError = true)]
         public static extern bool SetupDiDestroyDeviceInfoList(IntPtr DeviceInfoSet);
