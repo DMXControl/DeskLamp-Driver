@@ -11,6 +11,9 @@ namespace DeskLamp {
     /// Interface to the DMXControl DeskLamp
     /// </summary>
     public sealed class DeskLampInstance : IDisposable {
+
+        public static readonly int MIN_VERSION_WITH_RGB = 2;
+
         private const uint DIGCF_PRESENT = 0x2;
         private const uint DIGCF_DEVICEINTERFACE = 0x10;
         private const uint FILE_SHARE_READ = 0x1;
