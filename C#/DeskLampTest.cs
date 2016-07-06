@@ -12,12 +12,13 @@ namespace DeskLamp
         {
             IEnumerable<string> lamps = DeskLamp.DeskLampInstance.GetAvailableDeskLamps();
 
+            //No Arguments, run Test
             if(args == null || args.Length == 0)
             {
                 PrintDesklampList(lamps);
                 RunDesklampTest(lamps);
             }
-            else
+            else //Write RGB Property into Desklamps
             {
                 int indexSetRgb = IndexOf(args, c => c.Equals("-setrgb", StringComparison.InvariantCultureIgnoreCase));
                 if (indexSetRgb == -1) // not found
@@ -34,8 +35,15 @@ namespace DeskLamp
                 }
                 int indexSetID = IndexOf(args, c => c.Equals("-id", StringComparison.InvariantCultureIgnoreCase));
                 string paraid = null;
-                if (indexSetID != -1)
+                if (indexSetID != -1) //something found
+                {
                     paraid = args.ElementAtOrDefault(indexSetID + 1);
+                    if (String.IsNullOrEmpty(paraid))
+                    {
+                        PrintParameterHelp();
+                        return;
+                    }
+                }
 
                 PrintDesklampList(lamps);
 
@@ -54,13 +62,14 @@ namespace DeskLamp
                     lamps = Enumerable.Empty<string>();
                 }
 
+                int programmed = 0, errors = 0;
                 foreach (string id in lamps)
                 {
                     System.Console.WriteLine();
                     DeskLamp.DeskLampInstance lamp = new DeskLampInstance(id);
                     if (lamp.IsAvailable)
                     {
-                        if (lamp.Version < DeskLampInstance.MIN_VERSION_WITH_RGB)
+                        if (!lamp.HasRGB)
                         {
                             Console.WriteLine("Lamp \"{0}\" doesn't support RGB", id);
                         }
@@ -81,7 +90,8 @@ namespace DeskLamp
                         System.Console.WriteLine("Lamp with ID \"{0}\" not available!", lamp.ID);
                     }
                 }
-                Console.WriteLine("Setting RGB Mode done! Programm will exit in 5 seconds.");
+                Console.WriteLine("Setting RGB Mode done! {0} Lamps programmed. {1} Errors.", programmed, errors);
+                Console.WriteLine("Programm will exit in 5 seconds.");
                 System.Threading.Thread.Sleep(5000);
             }
         }
@@ -114,6 +124,7 @@ namespace DeskLamp
 
         static void RunDesklampTest(IEnumerable<string> lamps)
         {
+            int tested = 0, testedrgb = 0, notavailable = 0;
             foreach (string id in lamps ?? Enumerable.Empty<string>())
             {
                 System.Console.WriteLine();
@@ -125,7 +136,10 @@ namespace DeskLamp
 
                     if (!lamp.ExternalUSBConnected)
                     {
-                        System.Console.WriteLine("No intelligent USB device detected, dimming ok");
+                        if (lamp.HasExternalUSBDetection)
+                            System.Console.WriteLine("No intelligent USB device detected, dimming ok");
+                        else
+                            System.Console.WriteLine("Warn: Desklamp not capable of detecting external USB device!");
 
                         System.Console.Write("Fading brightness...");
                         int dir = 1;
@@ -164,11 +178,13 @@ namespace DeskLamp
                             }
                             System.Console.WriteLine(" Done.");
                             lamp.Color = Color.White;
+                            testedrgb++;
                         }
                         else
                         {
                             System.Console.WriteLine("Lamp is single-channel");
                         }
+                        tested++;
                     }
                     else
                     {
@@ -178,9 +194,11 @@ namespace DeskLamp
                 else
                 {
                     System.Console.WriteLine("Lamp with ID \"{0}\" not available!", lamp.ID);
+                    notavailable++;
                 }
             }
-            System.Console.WriteLine("Test done! Programm will exit in 5 seconds.");
+            System.Console.WriteLine("Test done! {0} Lamps tested ({1} with RGB). {2} not available.", tested, testedrgb, notavailable);
+            Console.WriteLine("Programm will exit in 5 seconds.");
             System.Threading.Thread.Sleep(5000);
         }
 
