@@ -78,9 +78,15 @@ namespace DeskLamp
                             lamp.IsRGB = value;
                             System.Threading.Thread.Sleep(100); //AL 2016-06-30: Don't know whether this Sleep is required...
                             if (lamp.IsRGB == value)
+							{
                                 Console.WriteLine("Successfull set RGB Mode of Lamp \"{0}\" to \"{1}\"", id, value);
+								programmed++;
+							}
                             else
+							{
                                 Console.WriteLine("Error setting RGB Mode of Lamp \"{0}\" to \"{1}\"", id, value);
+								errors++;
+							}
                         }
                         else
                             Console.WriteLine("Lamp \"{0}\" RGB Mode is already \"{1}\"", id, value);
