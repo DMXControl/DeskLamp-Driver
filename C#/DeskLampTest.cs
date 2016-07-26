@@ -18,20 +18,38 @@ namespace DeskLamp
                 PrintDesklampList(lamps);
                 RunDesklampTest(lamps);
             }
-            else //Write RGB Property into Desklamps
+            else //Write RGB / Adapter Property into Desklamps
             {
                 int indexSetRgb = IndexOf(args, c => c.Equals("-setrgb", StringComparison.InvariantCultureIgnoreCase));
-                if (indexSetRgb == -1) // not found
+                int indexSetAdapter = IndexOf(args, c => c.Equals("-setadapter", StringComparison.InvariantCultureIgnoreCase));
+                if (indexSetRgb == -1 && indexSetAdapter == -1) // not found
                 {
                     PrintParameterHelp();
                     return;
                 }
-                string rgbPara = args.ElementAtOrDefault(indexSetRgb + 1);
-                bool value;
-                if (String.IsNullOrEmpty(rgbPara) || !Boolean.TryParse(rgbPara, out value))
+                bool? rgbPara = null;
+                bool? adapterPara = null;
+                if (indexSetRgb != -1)
                 {
-                    PrintParameterHelp();
-                    return;
+                    bool v;
+                    string tmp = args.ElementAtOrDefault(indexSetRgb + 1);
+                    if (String.IsNullOrEmpty(tmp) || !Boolean.TryParse(tmp, out v))
+                    {
+                        PrintParameterHelp();
+                        return;
+                    }
+                    rgbPara = v;
+                }
+                if (indexSetAdapter != -1)
+                {
+                    bool v;
+                    string tmp = args.ElementAtOrDefault(indexSetAdapter + 1);
+                    if (String.IsNullOrEmpty(tmp) || !Boolean.TryParse(tmp, out v))
+                    {
+                        PrintParameterHelp();
+                        return;
+                    }
+                    adapterPara = v;
                 }
                 int indexSetID = IndexOf(args, c => c.Equals("-id", StringComparison.InvariantCultureIgnoreCase));
                 string paraid = null;
@@ -49,11 +67,17 @@ namespace DeskLamp
 
                 if (String.IsNullOrEmpty(paraid))
                 {
-                    Console.WriteLine("No Desklamp ID provided with \"-id\" parameter so all connected Desklamps RGB Mode will be set to \"{0}\"", value);
+                    if (rgbPara != null)
+                        Console.WriteLine("No Desklamp ID provided with \"-id\" parameter so all connected Desklamps RGB Mode will be set to \"{0}\"", rgbPara);
+                    if (adapterPara != null)
+                        Console.WriteLine("No Desklamp ID provided with \"-id\" parameter so all connected Desklamps Adapter Mode will be set to \"{0}\"", adapterPara);
                 }
                 else if (lamps.Contains(paraid))
                 {
-                    Console.WriteLine("Desklamp ID \"{0}\" provided with \"-id\" parameter RGB Mode will be set to \"{1}\"", paraid, value);
+                    if (rgbPara != null)
+                        Console.WriteLine("Desklamp ID \"{0}\" provided with \"-id\" parameter RGB Mode will be set to \"{1}\"", paraid, rgbPara);
+                    if (adapterPara != null)
+                        Console.WriteLine("Desklamp ID \"{0}\" provided with \"-id\" parameter Adapter Mode will be set to \"{1}\"", paraid, adapterPara);
                     lamps = new string[] { paraid };
                 }
                 else
@@ -69,43 +93,85 @@ namespace DeskLamp
                     DeskLamp.DeskLampInstance lamp = new DeskLampInstance(id);
                     if (lamp.IsAvailable)
                     {
-                        if (!lamp.HasRGB)
-                        {
-                            Console.WriteLine("Lamp \"{0}\" doesn't support RGB", id);
-                        }
-                        else if (lamp.IsRGB != value)
-                        {
-                            lamp.IsRGB = value;
-                            System.Threading.Thread.Sleep(100); //AL 2016-06-30: Don't know whether this Sleep is required...
-                            if (lamp.IsRGB == value)
-							{
-                                Console.WriteLine("Successfull set RGB Mode of Lamp \"{0}\" to \"{1}\"", id, value);
-								programmed++;
-							}
-                            else
-							{
-                                Console.WriteLine("Error setting RGB Mode of Lamp \"{0}\" to \"{1}\"", id, value);
-								errors++;
-							}
-                        }
-                        else
-                            Console.WriteLine("Lamp \"{0}\" RGB Mode is already \"{1}\"", id, value);
+                        bool? ergRgb = null, ergAdapter = null;
+                        if (rgbPara != null)
+                            ergRgb = SetAndValidateRGB(lamp, (bool)rgbPara);
+                        if (adapterPara != null)
+                            ergAdapter = SetAndValidateAdapter(lamp, (bool)adapterPara);
+
+                        if (ergRgb == true || ergAdapter == true)
+                            programmed++;
+                        if (ergRgb == false || ergAdapter == false)
+                            errors++;
                     }
                     else
                     {
                         System.Console.WriteLine("Lamp with ID \"{0}\" not available!", lamp.ID);
                     }
                 }
-                Console.WriteLine("Setting RGB Mode done! {0} Lamps programmed. {1} Errors.", programmed, errors);
+                Console.WriteLine("Setting RGB / Adapter Mode done! {0} Lamps programmed. {1} Errors.", programmed, errors);
                 Console.WriteLine("Programm will exit in 5 seconds.");
                 System.Threading.Thread.Sleep(5000);
             }
+        }
+
+        static bool? SetAndValidateRGB(DeskLamp.DeskLampInstance lamp, bool rgbValue)
+        {
+            if (!lamp.HasRGB)
+            {
+                Console.WriteLine("Lamp \"{0}\" doesn't support RGB", lamp.ID);
+            }
+            else if (lamp.IsRGB != rgbValue)
+            {
+                lamp.IsRGB = rgbValue;
+                System.Threading.Thread.Sleep(100); //AL 2016-06-30: Don't know whether this Sleep is required...
+                if (lamp.IsRGB == rgbValue)
+                {
+                    Console.WriteLine("Successfull set RGB Mode of Lamp \"{0}\" to \"{1}\"", lamp.ID, rgbValue);
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Error setting RGB Mode of Lamp \"{0}\" to \"{1}\"", lamp.ID, rgbValue);
+                    return false;
+                }
+            }
+            else
+                Console.WriteLine("Lamp \"{0}\" RGB Mode is already \"{1}\"", lamp.ID, rgbValue);
+            return null;
+        }
+
+        static bool? SetAndValidateAdapter(DeskLamp.DeskLampInstance lamp, bool adapterValue)
+        {
+            if (lamp.Version < 2)
+            {
+                Console.WriteLine("Lamp \"{0}\" is HW Rev. 1 and is always an Adapter", lamp.ID);
+            }
+            else if (lamp.IsAdapter != adapterValue)
+            {
+                lamp.IsAdapter = adapterValue;
+                System.Threading.Thread.Sleep(100); //AL 2016-06-30: Don't know whether this Sleep is required...
+                if (lamp.IsAdapter == adapterValue)
+                {
+                    Console.WriteLine("Successfull set Adapter Mode of Lamp \"{0}\" to \"{1}\"", lamp.ID, adapterValue);
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Error setting Adapter Mode of Lamp \"{0}\" to \"{1}\"", lamp.ID, adapterValue);
+                    return false;
+                }
+            }
+            else
+                Console.WriteLine("Lamp \"{0}\" Adapter Mode is already \"{1}\"", lamp.ID, adapterValue);
+            return null;
         }
 
         static void PrintParameterHelp()
         {
             Console.WriteLine("DeskLampTest.exe");
             Console.WriteLine("-setrgb [true | false]: Set RGB Mode of connected Desklamp to true / false");
+            Console.WriteLine("-setadapter [true | false]: Set Adapter Mode of connected Desklamp to true / false");
             Console.WriteLine("-id [DesklampID]: Optional ID for Set RGB Mode");
         }
 
@@ -139,6 +205,7 @@ namespace DeskLamp
                 {
                     System.Console.WriteLine("Lamp with ID \"{0}\" is available", lamp.ID);
                     System.Console.WriteLine("Lamp version: {0}", lamp.Version);
+                    System.Console.WriteLine("Lamp is Adapter: {0}", lamp.IsAdapter);
 
                     if (!lamp.ExternalUSBConnected)
                     {
