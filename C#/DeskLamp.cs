@@ -390,6 +390,55 @@ namespace DeskLamp {
         }
 
         /// <summary>
+        /// Is Desklamp an Adapter?
+        /// </summary>
+        public bool IsAdapter {
+            get {
+                if (this.IsDisposed)
+                    throw new ObjectDisposedException("desklamp");
+
+                if (!Enabled || !IsAvailable) {
+                    return false;
+                }
+
+                if (this._version < 2) {
+                    return true;
+                }
+
+                byte[] sendBuffer = new byte[] { 
+                    12, // Is adapter
+                    0
+                };
+                if (!DeskLampInterface.HidD_GetFeature(this._HIDHandle, sendBuffer, sendBuffer.Length)) {
+                    Close();
+                    return false;
+                }
+                return (sendBuffer[1] == 1);
+            }
+            set {
+                if (this.IsDisposed)
+                    throw new ObjectDisposedException("desklamp");
+
+                if (!Enabled || !IsAvailable) {
+                    return;
+                }
+
+                if (!HasExternalUSBDetection) {
+                    return;
+                }
+
+                byte[] sendBuffer = new byte[] { 
+                    11, // Set Adapter
+                    (byte)(value ? 1 : 0)
+                };
+                if (!DeskLampInterface.HidD_SetFeature(this._HIDHandle, sendBuffer, sendBuffer.Length)) {
+                    Close();
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or Sets the Color of the Desklamp
         /// </summary>
         public Color Color {
