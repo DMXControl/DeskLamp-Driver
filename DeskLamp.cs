@@ -61,6 +61,9 @@ namespace DeskLamp {
             this.Dispose();
         }
 
+        /// <summary>
+        /// True when this DeskLamp Instance is disposed
+        /// </summary>
         public bool IsDisposed
         {
             get;
@@ -288,11 +291,17 @@ namespace DeskLamp {
 
         #region Strobe
 
+        /// <summary>
+        /// Is Desklamp Version capable of having a Strobe
+        /// </summary>
         public bool HasStrobe
         {
             get { return _version >= 2; }
         }
 
+        /// <summary>
+        /// Gets or Sets the Strobe of the Desklamp
+        /// </summary>
         public byte Strobe {
             get { return _strobe; }
             set {
