@@ -41,15 +41,14 @@ pipeline {
 				echo "Git Commit Hash is ${commitHash}"
 				echo "Build Number is ${env.BUILD_NUMBER}"
 				
-				// Add the current build number in the version number and build the branch
-				changeAsmVer versionPattern: '$BUILD_NUMBER', regexPattern: 'Assembly(.*)Version\\("(.+)\\.(.+)\\.(.+)\\.(.+)"', replacementPattern: 'Assembly\$1Version("\$2.\$3.%s.\$5"'
+				// Build the current branch in debug mode
 				bat "\"${MSBuild}\" DeskLamp.sln /p:Configuration=Debug /t:Clean;Rebuild /p:Platform=\"Any CPU\" "
 			}
 		}
 		stage('Build Release Configuration'){
 			steps {
 				script {
-					//  Build the release configuration of the project
+					//  Build the release configuration of the current branch
 					bat "\"${MSBuild}\" DeskLamp.sln /p:Configuration=Release /p:DefineConstants=\"JENKINS\" /t:Clean;Rebuild /p:Platform=\"Any CPU\" "
 				}
 			}
@@ -69,7 +68,7 @@ pipeline {
 			when { buildingTag() }
 			steps {
 				script {
-					//  Run the NuGet Publisher Worker Job to pack and publish the artifacts
+					//  Run the NuGet Publisher Worker Job to pack and publish the artifacts (only, if this build is tagged)
 					build job:'_worker-NuGet-Publisher', parameters: [
 						string(name: 'WS_PATH', value: "${WORKSPACE}"),
 						string(name: 'PRJ_FILE', value: "DeskLamp.csproj" ),
