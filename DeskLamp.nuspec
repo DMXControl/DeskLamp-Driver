@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+	<metadata>
+		<id>DMXControlProjects.DeskLamp-Driver</id>
+		<version>$version$</version>
+		<title>$title$</title>
+		<authors>DMXControl Projects e.V.</authors>
+		<projectUrl>https://dmxcontrol-projects.org</projectUrl>
+		<description>This package contains the driver to control the various DeskLamp types</description>
+		<copyright>Copyright 2020</copyright>
+	</metadata>
+</package>
