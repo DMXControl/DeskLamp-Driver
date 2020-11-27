@@ -54,6 +54,7 @@ pipeline {
 			}
 		}
 		stage('Pack and Publish NuGet Package Internally'){
+			when { not {buildingTag() } }
 			steps {
 				script {
 					//  Run the NuGet Publisher Worker Job to pack and publish the artifacts
