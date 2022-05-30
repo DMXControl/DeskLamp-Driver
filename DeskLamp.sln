@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30225.117
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskLamp", "DeskLamp.csproj", "{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeskLamp", "DeskLamp.csproj", "{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeskLampTest", "DeskLampTest\DeskLampTest.csproj", "{ED622CBE-EC7E-4E63-B1BD-87AF13159B30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +20,12 @@ Global
 		{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{CF1C63B2-A44D-49F8-8ED4-405ACD48C44B}.Test|Any CPU.Build.0 = Test|Any CPU
+		{ED622CBE-EC7E-4E63-B1BD-87AF13159B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED622CBE-EC7E-4E63-B1BD-87AF13159B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED622CBE-EC7E-4E63-B1BD-87AF13159B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED622CBE-EC7E-4E63-B1BD-87AF13159B30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED622CBE-EC7E-4E63-B1BD-87AF13159B30}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED622CBE-EC7E-4E63-B1BD-87AF13159B30}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

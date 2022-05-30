@@ -6,4 +6,10 @@
     <Deterministic>False</Deterministic>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="DeskLampTest\**" />
+    <EmbeddedResource Remove="DeskLampTest\**" />
+    <None Remove="DeskLampTest\**" />
+  </ItemGroup>
+
 </Project>

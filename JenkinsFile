@@ -90,7 +90,7 @@ pipeline {
 			//  Run the post build processes only, if the build was a success because the the following steps need the output of the jobs so far
 			recordIssues tool: taskScanner(highTags:'FIXME', normalTags:'TODO', includePattern: '**/*.cs', IgnoreCase: true)
 		
-			archiveArtifacts artifacts: 'bin/Release/DeskLamp.exe', fingerprint: true
+			archiveArtifacts artifacts: 'DeskLampTest/bin/Debug/net6.0/*.*', fingerprint: true
 		}
 	}
 }
